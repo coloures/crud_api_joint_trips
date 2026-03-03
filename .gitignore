@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / compressed files
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyc
+*.bin
+# flake8 cache
+.flake8
+# Coverage run files and directories
+.coverage
+.coverage.*
+htmlcov/
+xmlcov/
+# Mypy cache
+.mypy_cache/
+# pytest cache
+.pytest_cache/
+
+# Distributions and packaging
+.env
+.venv
+env/
+venv/
+lib/
+build/
+develop-eggs/
+dist/
+eggs/
+*.egg-info/
+.install.lock
+# Pyenv
+.python-version
+
+# Editors and IDEs
+# VS Code
+.vscode/
+# PyCharm
+.idea/
+# Spyder
+.spyproject/
+# Jupyter
+.ipynb_checkpoints
+.jupyter_cache
+# Cloud IDEs
+.abstra/
+
+# Specific files
+pip-log.txt
+pip-delete-this-arg.txt
+# User-specified files
+.DS_Store # macOS files

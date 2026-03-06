@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-Workdir /app
+Workdir /crud_api_joint_trips
 
 copy requirements.txt .
 run pip install --no-cache-dir -r requirements.txt

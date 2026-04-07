@@ -7,5 +7,5 @@ class ExpenseAllocation(Base):
     id = Column(Integer, primary_key=True, index=True)
     expense_id = Column(Integer, ForeignKey("expenses.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
-    amount = Column(Integer, nullable=False)
-    isPaid = Column(Boolean, nullable=False)
+    amount = Column(Float, nullable=False)
+    is_paid = Column("isPaid", Boolean, nullable=False)

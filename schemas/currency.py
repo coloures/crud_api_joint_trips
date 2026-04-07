@@ -21,6 +21,6 @@ class CurrencyRead(CurrencyBase):
 
 
 class CurrencyUpdate(BaseModel):
-    code: Optional[str] = None
-    name: Optional[str] = None
-    symbol: Optional[str] = None
+    code: Optional[str] = Field(None, description="Обновлённый ISO-код")
+    name: Optional[str] = Field(None, description="Обновлённое название")
+    symbol: Optional[str] = Field(None, description="Обновлённый символ")

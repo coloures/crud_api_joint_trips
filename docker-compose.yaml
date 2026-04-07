@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    container_name: trip_postgres
+    environment:
+      POSTGRES_USER: trip_user
+      POSTGRES_PASSWORD: trip_password
+      POSTGRES_DB: trip_planner
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trip_user -d trip_planner"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  api:
+    build: .
+    container_name: crud_api_joint_trips-api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://trip_user:trip_password@db/trip_planner
+    ports:
+      - "8001:8001"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

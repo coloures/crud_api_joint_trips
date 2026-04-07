@@ -1,10 +1,11 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, Float, Date
+from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
 
 class TripMember(Base):
     __tablename__ = "tripMembers"
     
     id = Column(Integer, primary_key=True, index=True)
-    member_id = Column(Integer, nullable=False)
+    trip_id = Column(Integer, ForeignKey("trips.id"))
+    member_id = Column(Integer, ForeignKey("users.id"))
     status = Column(String, nullable=False)
     role = Column(String, nullable=False)

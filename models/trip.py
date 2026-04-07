@@ -1,16 +1,16 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, Float, Date
+from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
 
 class Trip(Base):
     __tablename__ = "trips"
     
     emoji = Column(String, nullable=False)
     id = Column(Integer, primary_key=True, index=True)
-    creator_id = Column(Integer, nullable=False)
+    creator_id = Column(Integer, ForeignKey("users.id"))
     title = Column(String, nullable=False)
     country = Column(String, nullable=False)
     startDate = Column(Date, nullable=False)
     endDate = Column(Date, nullable=False)
-    currency_id = Column(Integer, nullable=False)
+    currency_id = Column(Integer, ForeignKey("currencies.id"))
     budget = Column(Float, nullable=False)
     description = Column(String, nullable=True)

@@ -2,8 +2,6 @@ from fastapi import FastAPI
 from database import init_db, engine
 from routers.trip import router
 from contextlib import asynccontextmanager
-import models
-import database
 
 @asynccontextmanager
 async def lifespan(_):

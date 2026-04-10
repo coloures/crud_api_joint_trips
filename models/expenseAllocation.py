@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, Boolean, ForeignKey, Float
 
 class ExpenseAllocation(Base):
     __tablename__ = "expenseAllocations"

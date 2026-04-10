@@ -17,8 +17,7 @@ class CurrencyRead(CurrencyBase):
     id: int
 
     class Config:
-        orm_mode = True
-
+        from_attributes = True
 
 class CurrencyUpdate(BaseModel):
     code: Optional[str] = Field(None, description="Обновлённый ISO-код")

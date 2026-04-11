@@ -1,0 +1,1 @@
+-- Legacy init. Use 001_schema.sql and 002_data.sql.

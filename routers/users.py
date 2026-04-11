@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from schemas.user import UserCreate, UserRead, UserUpdate
@@ -18,6 +17,12 @@ async def get_users(repo: UserRepository = Depends(get_user_repository)):
 @router.get("/{user_id}", response_model=UserRead)
 async def get_user(user_id: int, repo: UserRepository = Depends(get_user_repository)):
     user = await repo.get_one(user_id)
+    if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
+
+@router.get("/phone/{user_number}", response_model=UserRead)
+async def get_user(user_number: int, repo: UserRepository = Depends(get_user_repository)):
+    user = await repo.get_by_phone(user_number)
     if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user
 
@@ -43,11 +48,28 @@ async def delete_user(user_id: int, repo: UserRepository = Depends(get_user_repo
     if not deleted: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return deleted
 
+def _normalize_name(value: str) -> str:
+    return value.strip().lower()
+
+
 @router.post("/login")
-async def login_user(phone_number: str, repo: UserRepository = Depends(get_user_repository)):
+async def login_user(
+    phone_number: str,
+    first_name: str,
+    last_name: str,
+    repo: UserRepository = Depends(get_user_repository)
+):
     user = await getattr(repo, 'get_by_phone', lambda x: None)(phone_number)
-    if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user  # можно вернуть {"user": user, "token": "..."} позже
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    if (
+        _normalize_name(user.first_name) != _normalize_name(first_name)
+        or _normalize_name(user.last_name) != _normalize_name(last_name)
+    ):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    return user
 
 @router.get("/current")
 async def get_current_user(user_id: int = 1, repo: UserRepository = Depends(get_user_repository)):  # временно

@@ -32,6 +32,12 @@ async def lookup_user(phone: str, repo: UserRepository = Depends(get_user_reposi
     if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user
 
+@router.get("/avatar")
+async def get_avatar(user_id: int, repo: UserRepository = Depends(get_user_repository)):
+    user = await getattr(repo, 'get_one', lambda x: None)(user_id)
+    if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user.avatar
+
 @router.post("/", response_model=int, status_code=status.HTTP_201_CREATED)
 async def add_user(user: UserCreate, repo: UserRepository = Depends(get_user_repository)):
     return await repo.add(user)

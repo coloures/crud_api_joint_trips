@@ -21,6 +21,8 @@ services:
     container_name: crud_api_joint_trips-api
     environment:
       DATABASE_URL: postgresql+asyncpg://trip_user:trip_password@db/trip_planner
+      IMGBB_API_KEY: "0956da4e5a6233e1738165ef08a2a035"
+      IMGBB_UPLOAD_URL: "https://api.imgbb.com/1/upload"
     ports:
       - "8001:8001"
     depends_on:

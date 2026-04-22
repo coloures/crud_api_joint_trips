@@ -5,12 +5,12 @@ INSERT INTO currencies (id, code, name, symbol) VALUES (2, 'USD', 'US Dollar', '
 INSERT INTO currencies (id, code, name, symbol) VALUES (3, 'EUR', 'Euro', '€');
 INSERT INTO currencies (id, code, name, symbol) VALUES (4, 'TRY', 'Turkish Lira', '₺');
 INSERT INTO currencies (id, code, name, symbol) VALUES (5, 'GEL', 'Georgian Lari', '₾');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (1, 'Christian', 'De la Torre', '+521234567890', 'https://ibb.co/BHBpY0m0');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (2, 'Anna', 'Petrova', '+79161234567', 'https://ibb.co/qYH6gPPT');
+INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (1, 'Christian', 'De la Torre', '+521234567890', 'https://i.ibb.co/dsDTH8S8/8-avatar.jpg');
+INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (2, 'Anna', 'Petrova', '+79161234567', 'https://i.ibb.co/1GCcXwwF/6-avatar.jpg');
 INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (3, 'Miguel', 'Sanchez', '+521987654321', NULL);
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (4, 'Elena', 'Volkova', '+79267654321', 'https://ibb.co/TDqPxQPt');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (5, 'Ahmed', 'Khalil', '+905551234567', 'https://ibb.co/rKHGQ30r');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (6, '1', '1', '1', 'https://ibb.co/bM2hMZ5C');
+INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (4, 'Elena', 'Volkova', '+79267654321', 'https://i.ibb.co/wZrpFnp4/1-avatar.jpg');
+INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (5, 'Ahmed', 'Khalil', '+905551234567', 'https://i.ibb.co/ymqnNpPj/10-avatar.jpg');
+INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (6, '1', '1', '1', 'https://i.ibb.co/B2b9sFHd/9-avatar.jpg');
 INSERT INTO expenseTypes (id, name, icon, color) VALUES (1, 'Билеты', '🎟️', '#01BEE0');
 INSERT INTO expenseTypes (id, name, icon, color) VALUES (2, 'Отель', '🏨', '#FFDD2D');
 INSERT INTO expenseTypes (id, name, icon, color) VALUES (3, 'Питание', '🍽️', '#9C87F3');

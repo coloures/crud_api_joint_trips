@@ -1,51 +1,59 @@
-BEGIN;
+﻿BEGIN;
 
-INSERT INTO currencies (id, code, name, symbol) VALUES (1, 'RUB', 'Russian Ruble', '₽');
-INSERT INTO currencies (id, code, name, symbol) VALUES (2, 'USD', 'US Dollar', '$');
-INSERT INTO currencies (id, code, name, symbol) VALUES (3, 'EUR', 'Euro', '€');
-INSERT INTO currencies (id, code, name, symbol) VALUES (4, 'TRY', 'Turkish Lira', '₺');
-INSERT INTO currencies (id, code, name, symbol) VALUES (5, 'GEL', 'Georgian Lari', '₾');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (1, 'Christian', 'De la Torre', '+521234567890', 'https://i.ibb.co/dsDTH8S8/8-avatar.jpg');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (2, 'Anna', 'Petrova', '+79161234567', 'https://i.ibb.co/1GCcXwwF/6-avatar.jpg');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (3, 'Miguel', 'Sanchez', '+521987654321', NULL);
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (4, 'Elena', 'Volkova', '+79267654321', 'https://i.ibb.co/wZrpFnp4/1-avatar.jpg');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (5, 'Ahmed', 'Khalil', '+905551234567', 'https://i.ibb.co/ymqnNpPj/10-avatar.jpg');
-INSERT INTO users (id, first_name, last_name, phone_number, avatar) VALUES (6, '1', '1', '1', 'https://i.ibb.co/B2b9sFHd/9-avatar.jpg');
-INSERT INTO expenseTypes (id, name, icon, color) VALUES (1, 'Билеты', '🎟️', '#01BEE0');
-INSERT INTO expenseTypes (id, name, icon, color) VALUES (2, 'Отель', '🏨', '#FFDD2D');
-INSERT INTO expenseTypes (id, name, icon, color) VALUES (3, 'Питание', '🍽️', '#9C87F3');
-INSERT INTO expenseTypes (id, name, icon, color) VALUES (4, 'Развлечения', '🎭', '#FC938A');
-INSERT INTO expenseTypes (id, name, icon, color) VALUES (5, 'Шопинг', '🛍️', '#ACCD6C');
-INSERT INTO expenseTypes (id, name, icon, color) VALUES (6, 'Прочее', '🗿', '#1DACA4');
-INSERT INTO trips (id, emoji, creator_id, title, country, startDate, endDate, currency_id, budget, description) VALUES (1, '🏔️', 6, 'Кавказские горы', 'Russia', '2026-07-10', '2026-07-20', 1, 75000, 'Трекинг и кемпинг в горах');
-INSERT INTO trips (id, emoji, creator_id, title, country, startDate, endDate, currency_id, budget, description) VALUES (2, '🏖️', 2, 'Отдых в Анталье', 'Turkey', '2026-08-01', '2026-08-10', 4, 120000, NULL);
-INSERT INTO trips (id, emoji, creator_id, title, country, startDate, endDate, currency_id, budget, description) VALUES (3, '🗼', 6, 'Европейский тур', 'France', '2026-09-15', '2026-09-25', 3, 250000, 'Париж, Барселона, Рим');
-INSERT INTO trips (id, emoji, creator_id, title, country, startDate, endDate, currency_id, budget, description) VALUES (4, '🏯', 4, 'Япония: сакура', 'Japan', '2027-03-20', '2027-04-05', 2, 450000, NULL);
-INSERT INTO trips (id, emoji, creator_id, title, country, startDate, endDate, currency_id, budget, description) VALUES (5, '🏜️', 3, 'Пустыня Сахара', 'Morocco', '2026-11-01', '2026-11-12', 5, 95000, 'Экспедиция с гидами');
-INSERT INTO tripBudgetCategories (id, trip_id, expense_type_id, planned_amount) VALUES (1, 1, 1, 40000);
-INSERT INTO tripBudgetCategories (id, trip_id, expense_type_id, planned_amount) VALUES (2, 1, 2, 30000);
-INSERT INTO tripBudgetCategories (id, trip_id, expense_type_id, planned_amount) VALUES (3, 1, 3, 5000);
-INSERT INTO tripBudgetCategories (id, trip_id, expense_type_id, planned_amount) VALUES (6, 1, 6, 2000);
-INSERT INTO tripMembers (id, trip_id, member_id, status, role) VALUES (1, 1, 6, 'confirmed', 'organizer');
-INSERT INTO tripMembers (id, trip_id, member_id, status, role) VALUES (2, 1, 2, 'confirmed', 'participant');
-INSERT INTO tripMembers (id, trip_id, member_id, status, role) VALUES (3, 2, 2, 'confirmed', 'organizer');
-INSERT INTO tripMembers (id, trip_id, member_id, status, role) VALUES (4, 2, 4, 'pending', 'participant');
-INSERT INTO tripMembers (id, trip_id, member_id, status, role) VALUES (5, 3, 6, 'confirmed', 'organizer');
-INSERT INTO tripMembers (id, trip_id, member_id, status, role) VALUES (6, 1, 4, 'confirmed', 'organizer');
-INSERT INTO expenses (id, trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 1, 1, 15000, '2026-07-11', 2, 'Бронь домика в горах', 1);
-INSERT INTO expenses (id, trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (2, 1, 2, 3500, '2026-07-12', 3, 'Продукты на ужин', 1);
-INSERT INTO expenses (id, trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (3, 2, 2, 45000, '2026-08-02', 2, 'Отель all-inclusive', 1);
-INSERT INTO expenses (id, trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (4, 1, 1, 8900, '2026-09-16', 1, 'Билеты на поезд Париж-Барселона', 1);
-INSERT INTO expenses (id, trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (5, 1, 4, 12500, '2026-09-18', 4, 'Экскурсия в Лувр', 1);
-INSERT INTO expenseAllocations (id, expense_id, user_id, amount, isPaid) VALUES (1, 1, 1, 7500, TRUE);
-INSERT INTO expenseAllocations (id, expense_id, user_id, amount, isPaid) VALUES (2, 1, 2, 7500, FALSE);
-INSERT INTO expenseAllocations (id, expense_id, user_id, amount, isPaid) VALUES (3, 2, 1, 1750, TRUE);
-INSERT INTO expenseAllocations (id, expense_id, user_id, amount, isPaid) VALUES (4, 2, 2, 1750, TRUE);
-INSERT INTO expenseAllocations (id, expense_id, user_id, amount, isPaid) VALUES (5, 3, 2, 45000, FALSE);
-INSERT INTO notifications (id, trip_id, user_id, type, message, is_read, created_at) VALUES (1, 1, 1, 'expense_added', 'Иван добавил расход ''Билеты на самолёт'' на сумму 40 000 ₽', FALSE, '2026-06-10T10:30:00Z');
-INSERT INTO notifications (id, trip_id, user_id, type, message, is_read, created_at) VALUES (2, 1, 2, 'reminder', 'Алексей, не забудьте добавить чек за ужин в ''Кавказские горы''.', FALSE, '2026-06-10T11:15:00Z');
-INSERT INTO notifications (id, trip_id, user_id, type, message, is_read, created_at) VALUES (3, 2, 4, 'status_changed', 'Ваша заявка на участие в поездке ''Отдых в Анталье'' одобрена.', TRUE, '2026-06-09T18:00:00Z');
-INSERT INTO notifications (id, trip_id, user_id, type, message, is_read, created_at) VALUES (4, 3, 1, 'budget_changed', 'Общий бюджет поездки ''Европейский тур'' увеличен до 270 000 ₽.', FALSE, '2026-06-08T09:45:00Z');
-INSERT INTO notifications (id, trip_id, user_id, type, message, is_read, created_at) VALUES (5, 4, 4, 'expense_added', 'Добавлена новая трата на трансфер в аэропорт.', TRUE, '2026-06-07T14:20:00Z');
+INSERT INTO currencies (code, name, symbol) VALUES ('RUB', 'Russian Ruble', '₽');
+INSERT INTO currencies (code, name, symbol) VALUES ('USD', 'US Dollar', '$');
+INSERT INTO currencies (code, name, symbol) VALUES ('EUR', 'Euro', '€');
+INSERT INTO currencies (code, name, symbol) VALUES ('TRY', 'Turkish Lira', '₺');
+INSERT INTO currencies (code, name, symbol) VALUES ('GEL', 'Georgian Lari', '₾');
+
+INSERT INTO users (first_name, last_name, phone_number, avatar) VALUES ('Christian', 'De la Torre', '+521234567890', 'https://i.ibb.co/dsDTH8S8/8-avatar.jpg');
+INSERT INTO users (first_name, last_name, phone_number, avatar) VALUES ('Anna', 'Petrova', '+79161234567', 'https://i.ibb.co/1GCcXwwF/6-avatar.jpg');
+INSERT INTO users (first_name, last_name, phone_number, avatar) VALUES ('Miguel', 'Sanchez', '+521987654321', NULL);
+INSERT INTO users (first_name, last_name, phone_number, avatar) VALUES ('Elena', 'Volkova', '+79267654321', 'https://i.ibb.co/wZrpFnp4/1-avatar.jpg');
+INSERT INTO users (first_name, last_name, phone_number, avatar) VALUES ('Ahmed', 'Khalil', '+905551234567', 'https://i.ibb.co/ymqnNpPj/10-avatar.jpg');
+INSERT INTO users (first_name, last_name, phone_number, avatar) VALUES ('1', '1', '1', 'https://i.ibb.co/B2b9sFHd/9-avatar.jpg');
+
+INSERT INTO "expenseTypes" (name, icon, color) VALUES ('Билеты', '🎟️', '#01BEE0');
+INSERT INTO "expenseTypes" (name, icon, color) VALUES ('Отель', '🏨', '#FFDD2D');
+INSERT INTO "expenseTypes" (name, icon, color) VALUES ('Питание', '🍽️', '#9C87F3');
+INSERT INTO "expenseTypes" (name, icon, color) VALUES ('Развлечения', '🎭', '#FC938A');
+INSERT INTO "expenseTypes" (name, icon, color) VALUES ('Шопинг', '🛍️', '#ACCD6C');
+INSERT INTO "expenseTypes" (name, icon, color) VALUES ('Прочее', '🗿', '#1DACA4');
+
+INSERT INTO trips (emoji, creator_id, title, country, startdate, enddate, currency_id, budget, description) VALUES ('🏔️', 6, 'Кавказские горы', 'Russia', '2026-07-10', '2026-07-20', 1, 75000, 'Трекинг и кемпинг в горах');
+INSERT INTO trips (emoji, creator_id, title, country, startdate, enddate, currency_id, budget, description) VALUES ('🏖️', 2, 'Отдых в Анталье', 'Turkey', '2026-08-01', '2026-08-10', 4, 120000, NULL);
+INSERT INTO trips (emoji, creator_id, title, country, startdate, enddate, currency_id, budget, description) VALUES ('🗼', 6, 'Европейский тур', 'France', '2026-09-15', '2026-09-25', 3, 250000, 'Париж, Барселона, Рим');
+INSERT INTO trips (emoji, creator_id, title, country, startdate, enddate, currency_id, budget, description) VALUES ('🏯', 4, 'Япония: сакура', 'Japan', '2027-03-20', '2027-04-05', 2, 450000, NULL);
+INSERT INTO trips (emoji, creator_id, title, country, startdate, enddate, currency_id, budget, description) VALUES ('🏜️', 3, 'Пустыня Сахара', 'Morocco', '2026-11-01', '2026-11-12', 5, 95000, 'Экспедиция с гидами');
+
+INSERT INTO "tripBudgetCategories" (trip_id, expense_type_id, planned_amount) VALUES (1, 1, 40000);
+INSERT INTO "tripBudgetCategories" (trip_id, expense_type_id, planned_amount) VALUES (1, 2, 30000);
+INSERT INTO "tripBudgetCategories" (trip_id, expense_type_id, planned_amount) VALUES (1, 3, 5000);
+INSERT INTO "tripBudgetCategories" (trip_id, expense_type_id, planned_amount) VALUES (1, 6, 2000);
+
+INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (1, 6, 'confirmed', 'organizer');
+INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (1, 2, 'confirmed', 'participant');
+INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (2, 2, 'confirmed', 'organizer');
+INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (2, 4, 'pending', 'participant');
+INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (3, 6, 'confirmed', 'organizer');
+INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (1, 4, 'confirmed', 'organizer');
+
+INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 1, 15000, '2026-07-11', 2, 'Бронь домика в горах', 1);
+INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 2, 3500, '2026-07-12', 3, 'Продукты на ужин', 1);
+INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (2, 2, 45000, '2026-08-02', 2, 'Отель all-inclusive', 1);
+INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 1, 8900, '2026-09-16', 1, 'Билеты на поезд Париж-Барселона', 1);
+INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 4, 12500, '2026-09-18', 4, 'Экскурсия в Лувр', 1);
+
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (1, 1, 7500, TRUE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (1, 2, 7500, FALSE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (2, 1, 1750, TRUE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (2, 2, 1750, TRUE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (3, 2, 45000, FALSE);
+
+INSERT INTO notifications (trip_id, user_id, type, message, is_read, created_at) VALUES (1, 1, 'expense_added', 'Иван добавил расход ''Билеты на самолёт'' на сумму 40 000 ₽', FALSE, '2026-06-10T10:30:00Z');
+INSERT INTO notifications (trip_id, user_id, type, message, is_read, created_at) VALUES (1, 2, 'reminder', 'Алексей, не забудьте добавить чек за ужин в ''Кавказские горы''.', FALSE, '2026-06-10T11:15:00Z');
+INSERT INTO notifications (trip_id, user_id, type, message, is_read, created_at) VALUES (2, 4, 'status_changed', 'Ваша заявка на участие в поездке ''Отдых в Анталье'' одобрена.', TRUE, '2026-06-09T18:00:00Z');
+INSERT INTO notifications (trip_id, user_id, type, message, is_read, created_at) VALUES (3, 1, 'budget_changed', 'Общий бюджет поездки ''Европейский тур'' увеличен до 270 000 ₽.', FALSE, '2026-06-08T09:45:00Z');
+INSERT INTO notifications (trip_id, user_id, type, message, is_read, created_at) VALUES (4, 4, 'expense_added', 'Добавлена новая трата на трансфер в аэропорт.', TRUE, '2026-06-07T14:20:00Z');
 
 COMMIT;

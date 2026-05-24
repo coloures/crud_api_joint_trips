@@ -1,18 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.trip_member import TripMemberCreate, TripMemberRead, TripMemberUpdate
-from repositories import TripMemberRepository
 from database import get_db
+from repositories import TripMemberRepository
+from schemas.trip_member import TripMemberCreate, TripMemberRead, TripMemberUpdate
 
 router = APIRouter(prefix="/trip-members", tags=["trip-members"])
+
 
 def get_trip_member_repository(db: AsyncSession = Depends(get_db)) -> TripMemberRepository:
     return TripMemberRepository(db)
 
+
 @router.get("/", response_model=list[TripMemberRead])
 async def get_trip_members(repo: TripMemberRepository = Depends(get_trip_member_repository)):
     return await repo.get_all()
+
+
+@router.get("/trips/{trip_id}", response_model=list[TripMemberRead])
+async def get_members_by_trip(trip_id: int, repo: TripMemberRepository = Depends(get_trip_member_repository)):
+    return await repo.get_by_trip(trip_id)
+
 
 @router.get("/{member_id}", response_model=TripMemberRead)
 async def get_trip_member(member_id: int, repo: TripMemberRepository = Depends(get_trip_member_repository)):
@@ -21,13 +29,11 @@ async def get_trip_member(member_id: int, repo: TripMemberRepository = Depends(g
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trip member not found")
     return member
 
-@router.get("/trips/{trip_id}", response_model=list[TripMemberRead])
-async def get_members_by_trip(trip_id: int, repo: TripMemberRepository = Depends(get_trip_member_repository)):
-    return await getattr(repo, 'get_by_trip', repo.get_all)(trip_id)
 
 @router.post("/trips/{trip_id}", response_model=int, status_code=status.HTTP_201_CREATED)
 async def add_trip_member(trip_id: int, member: TripMemberCreate, repo: TripMemberRepository = Depends(get_trip_member_repository)):
     return await repo.add(member)
+
 
 @router.patch("/{member_id}", response_model=TripMemberRead)
 async def change_trip_member(member_id: int, member: TripMemberUpdate, repo: TripMemberRepository = Depends(get_trip_member_repository)):
@@ -35,6 +41,7 @@ async def change_trip_member(member_id: int, member: TripMemberUpdate, repo: Tri
     if not changed:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trip member not found")
     return changed
+
 
 @router.delete("/{member_id}", response_model=TripMemberRead)
 async def delete_trip_member(member_id: int, repo: TripMemberRepository = Depends(get_trip_member_repository)):

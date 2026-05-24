@@ -36,6 +36,9 @@ class TripBudgetCategoryRepository:
         )
         return result.scalar_one_or_none()
 
+    async def get_by_trip_and_expense_type(self, trip_id: int, expense_type_id: int) -> TripBudgetCategory | None:
+        return await self.get_category(trip_id, expense_type_id)
+
     async def get_planned_total(self, trip_id: int) -> float:
         query = select(func.sum(TripBudgetCategory.planned_amount)).where(
             TripBudgetCategory.trip_id == trip_id
@@ -46,6 +49,22 @@ class TripBudgetCategoryRepository:
 
     async def change(self, category_id: int, updates: TripBudgetCategoryUpdate) -> TripBudgetCategory | None:
         category = await self.db.get(TripBudgetCategory, category_id)
+        if not category:
+            return None
+        update_data = updates.model_dump(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(category, field, value)
+        await self.db.commit()
+        await self.db.refresh(category)
+        return category
+
+    async def set_budget_for_category(
+        self,
+        trip_id: int,
+        expense_type_id: int,
+        updates: TripBudgetCategoryUpdate
+    ) -> TripBudgetCategory | None:
+        category = await self.get_category(trip_id, expense_type_id)
         if not category:
             return None
         update_data = updates.model_dump(exclude_unset=True)

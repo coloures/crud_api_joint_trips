@@ -1,27 +1,36 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
+import os
+
+import httpx
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from database import get_db
 from repositories import UserRepository
 from schemas.user import UserUpdate
-import httpx
-import os
-from database import get_db
 
 router = APIRouter(prefix="/avatars", tags=["avatars"])
 
+
 def get_avatar_repository(db: AsyncSession = Depends(get_db)) -> UserRepository:
     return UserRepository(db)
+
 
 IMGBB_API_KEY = os.getenv("IMGBB_API_KEY")
 IMGBB_UPLOAD_URL = os.getenv("IMGBB_UPLOAD_URL")
 
 
 @router.post("/upload/{user_id}")
-async def upload_to_imgbb(user_id: int, file: UploadFile = File(...), repo: UserRepository = Depends(get_avatar_repository)):
+async def upload_to_imgbb(
+    user_id: int,
+    file: UploadFile = File(...),
+    repo: UserRepository = Depends(get_avatar_repository)
+):
     if not IMGBB_API_KEY:
         raise HTTPException(status_code=500, detail="IMGBB_API_KEY not set")
-    
-    user = await repo.get_one(user_id=user_id)
+    if not IMGBB_UPLOAD_URL:
+        raise HTTPException(status_code=500, detail="IMGBB_UPLOAD_URL not set")
 
+    user = await repo.get_one(user_id=user_id)
     if not user:
         raise HTTPException(status_code=404, detail="Пользователь не найден")
 
@@ -55,17 +64,18 @@ async def upload_to_imgbb(user_id: int, file: UploadFile = File(...), repo: User
             )
 
         payload = response.json()
-
         if not payload.get("success"):
             raise HTTPException(status_code=502, detail=payload)
-        
-        image_url = payload["data"]["display_url"]
 
+        image_url = payload["data"]["display_url"]
         updated_user = await repo.change(
             user_id=user_id,
             new_user=UserUpdate(avatar=image_url)
         )
+        if not updated_user:
+            raise HTTPException(status_code=404, detail="Пользователь не найден")
 
+        return {"avatar": image_url}
     except httpx.RequestError as e:
         raise HTTPException(status_code=502, detail=f"Ошибка сети: {str(e)}")
     finally:

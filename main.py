@@ -10,6 +10,7 @@ from routers.trip_members import router as trip_members_router
 from routers.trip_budget_categories import router as trip_budget_categories_router
 from routers.notifications import router as notifications_router
 from routers.avatar import router as avatar_router
+from routers.debts import router as debts_router
 
 from contextlib import asynccontextmanager
 
@@ -33,6 +34,7 @@ app.include_router(trip_members_router)
 app.include_router(trip_budget_categories_router)
 app.include_router(notifications_router)
 app.include_router(avatar_router)
+app.include_router(debts_router)
 
 @app.get('/')
 def root():

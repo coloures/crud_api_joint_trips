@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 
 class Notification(Base):
     __tablename__ = "notifications"
@@ -10,4 +10,4 @@ class Notification(Base):
     type = Column(String, nullable=False)
     message = Column(String, nullable=False)
     is_read = Column(Boolean)
-    created_at = Column(Date, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False)

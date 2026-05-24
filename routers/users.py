@@ -7,65 +7,52 @@ from database import get_db
 
 router = APIRouter(prefix="/users", tags=["users"])
 
+
 def get_user_repository(db: AsyncSession = Depends(get_db)) -> UserRepository:
     return UserRepository(db)
 
-@router.get("/", response_model=list[UserRead])
-async def get_users(repo: UserRepository = Depends(get_user_repository)):
-    return await repo.get_all()
-
-@router.get("/{user_id}", response_model=UserRead)
-async def get_user(user_id: int, repo: UserRepository = Depends(get_user_repository)):
-    user = await repo.get_one(user_id)
-    if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
-
-@router.get("/phone/{user_number}", response_model=UserRead)
-async def get_user(user_number: int, repo: UserRepository = Depends(get_user_repository)):
-    user = await repo.get_by_phone(user_number)
-    if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
-
-@router.get("/lookup")
-async def lookup_user(phone: str, repo: UserRepository = Depends(get_user_repository)):
-    user = await getattr(repo, 'get_by_phone', lambda x: None)(phone)
-    if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
-
-@router.get("/avatar")
-async def get_avatar(user_id: int, repo: UserRepository = Depends(get_user_repository)):
-    user = await getattr(repo, 'get_one', lambda x: None)(user_id)
-    if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user.avatar
-
-@router.post("/", response_model=int, status_code=status.HTTP_201_CREATED)
-async def add_user(user: UserCreate, repo: UserRepository = Depends(get_user_repository)):
-    return await repo.add(user)
-
-@router.patch("/{user_id}", response_model=UserRead)
-async def change_user(user_id: int, user: UserUpdate, repo: UserRepository = Depends(get_user_repository)):
-    changed = await repo.change(user_id, user)
-    if not changed: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return changed
-
-@router.delete("/{user_id}", response_model=UserRead)
-async def delete_user(user_id: int, repo: UserRepository = Depends(get_user_repository)):
-    deleted = await repo.delete(user_id)
-    if not deleted: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return deleted
 
 def _normalize_name(value: str) -> str:
     return value.strip().lower()
 
 
-@router.post("/login")
+@router.get("/", response_model=list[UserRead])
+async def get_users(repo: UserRepository = Depends(get_user_repository)):
+    return await repo.get_all()
+
+
+@router.get("/phone/{user_number}", response_model=UserRead)
+async def get_user_by_phone(user_number: str, repo: UserRepository = Depends(get_user_repository)):
+    user = await repo.get_by_phone(user_number)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
+
+
+@router.get("/lookup", response_model=UserRead)
+async def lookup_user(phone: str, repo: UserRepository = Depends(get_user_repository)):
+    user = await repo.get_by_phone(phone)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
+
+
+@router.get("/avatar")
+async def get_avatar(user_id: int, repo: UserRepository = Depends(get_user_repository)):
+    user = await repo.get_one(user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user.avatar
+
+
+@router.post("/login", response_model=UserRead)
 async def login_user(
     phone_number: str,
     first_name: str,
     last_name: str,
     repo: UserRepository = Depends(get_user_repository)
 ):
-    user = await getattr(repo, 'get_by_phone', lambda x: None)(phone_number)
+    user = await repo.get_by_phone(phone_number)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
@@ -77,8 +64,39 @@ async def login_user(
 
     return user
 
-@router.get("/current")
-async def get_current_user(user_id: int = 1, repo: UserRepository = Depends(get_user_repository)):  # временно
+
+@router.get("/current", response_model=UserRead)
+async def get_current_user(user_id: int = 1, repo: UserRepository = Depends(get_user_repository)):
     user = await repo.get_one(user_id)
-    if not user: raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user
+
+
+@router.get("/{user_id}", response_model=UserRead)
+async def get_user(user_id: int, repo: UserRepository = Depends(get_user_repository)):
+    user = await repo.get_one(user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
+
+
+@router.post("/", response_model=int, status_code=status.HTTP_201_CREATED)
+async def add_user(user: UserCreate, repo: UserRepository = Depends(get_user_repository)):
+    return await repo.add(user)
+
+
+@router.patch("/{user_id}", response_model=UserRead)
+async def change_user(user_id: int, user: UserUpdate, repo: UserRepository = Depends(get_user_repository)):
+    changed = await repo.change(user_id, user)
+    if not changed:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return changed
+
+
+@router.delete("/{user_id}", response_model=UserRead)
+async def delete_user(user_id: int, repo: UserRepository = Depends(get_user_repository)):
+    deleted = await repo.delete(user_id)
+    if not deleted:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return deleted

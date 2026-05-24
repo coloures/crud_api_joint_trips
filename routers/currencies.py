@@ -1,22 +1,36 @@
-from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.currency import CurrencyCreate, CurrencyRead, CurrencyUpdate
-from repositories import CurrencyRepository
 from database import get_db
+from repositories import CurrencyRepository
+from schemas.currency import CurrencyCreate, CurrencyRead, CurrencyUpdate
 
 router = APIRouter(prefix="/currencies", tags=["currencies"])
+
 
 def get_currency_repository(db: AsyncSession = Depends(get_db)) -> CurrencyRepository:
     return CurrencyRepository(db)
 
+
 @router.get("/", response_model=list[CurrencyRead])
 async def get_currencies(
-    code: Optional[str] = None, name: Optional[str] = None, symbol: Optional[str] = None,
+    code: Optional[str] = None,
+    name: Optional[str] = None,
+    symbol: Optional[str] = None,
     repo: CurrencyRepository = Depends(get_currency_repository)
 ):
-    return await repo.get_all()  # фильтры можно добавить в репозиторий позже
+    return await repo.get_all()
+
+
+@router.get("/by-code/{code}", response_model=CurrencyRead)
+async def get_currency_by_code(code: str, repo: CurrencyRepository = Depends(get_currency_repository)):
+    currency = await repo.get_by_code(code)
+    if not currency:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Currency not found")
+    return currency
+
 
 @router.get("/{currency_id}", response_model=CurrencyRead)
 async def get_currency(currency_id: int, repo: CurrencyRepository = Depends(get_currency_repository)):
@@ -25,16 +39,11 @@ async def get_currency(currency_id: int, repo: CurrencyRepository = Depends(get_
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Currency not found")
     return currency
 
-@router.get("/by-code/{code}", response_model=CurrencyRead)
-async def get_currency_by_code(code: str, repo: CurrencyRepository = Depends(get_currency_repository)):
-    currency = await getattr(repo, 'get_by_code', lambda x: None)(code)
-    if not currency:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Currency not found")
-    return currency
 
 @router.post("/", response_model=int, status_code=status.HTTP_201_CREATED)
 async def add_currency(currency: CurrencyCreate, repo: CurrencyRepository = Depends(get_currency_repository)):
     return await repo.add(currency)
+
 
 @router.patch("/{currency_id}", response_model=CurrencyRead)
 async def change_currency(currency_id: int, currency: CurrencyUpdate, repo: CurrencyRepository = Depends(get_currency_repository)):
@@ -42,6 +51,7 @@ async def change_currency(currency_id: int, currency: CurrencyUpdate, repo: Curr
     if not changed:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Currency not found")
     return changed
+
 
 @router.delete("/{currency_id}", response_model=CurrencyRead)
 async def delete_currency(currency_id: int, repo: CurrencyRepository = Depends(get_currency_repository)):

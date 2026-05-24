@@ -1,19 +1,31 @@
-from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.expense_type import ExpenseTypeCreate, ExpenseTypeRead, ExpenseTypeUpdate
-from repositories import ExpenseTypeRepository
 from database import get_db
+from repositories import ExpenseTypeRepository
+from schemas.expense_type import ExpenseTypeCreate, ExpenseTypeRead, ExpenseTypeUpdate
 
 router = APIRouter(prefix="/expense-types", tags=["expense-types"])
+
 
 def get_expense_type_repository(db: AsyncSession = Depends(get_db)) -> ExpenseTypeRepository:
     return ExpenseTypeRepository(db)
 
+
 @router.get("/", response_model=list[ExpenseTypeRead])
 async def get_expense_types(repo: ExpenseTypeRepository = Depends(get_expense_type_repository)):
     return await repo.get_all()
+
+
+@router.get("/search", response_model=list[ExpenseTypeRead])
+async def search_expense_types(name: Optional[str] = None, repo: ExpenseTypeRepository = Depends(get_expense_type_repository)):
+    if not name:
+        return await repo.get_all()
+    found = await repo.get_by_name(name)
+    return [found] if found else []
+
 
 @router.get("/{expense_type_id}", response_model=ExpenseTypeRead)
 async def get_expense_type(expense_type_id: int, repo: ExpenseTypeRepository = Depends(get_expense_type_repository)):
@@ -22,13 +34,11 @@ async def get_expense_type(expense_type_id: int, repo: ExpenseTypeRepository = D
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Expense type not found")
     return et
 
-@router.get("/search")
-async def search_expense_types(name: Optional[str] = None, repo: ExpenseTypeRepository = Depends(get_expense_type_repository)):
-    return await repo.get_all()  # можно позже добавить фильтр в репозиторий
 
 @router.post("/", response_model=int, status_code=status.HTTP_201_CREATED)
 async def add_expense_type(expense_type: ExpenseTypeCreate, repo: ExpenseTypeRepository = Depends(get_expense_type_repository)):
     return await repo.add(expense_type)
+
 
 @router.patch("/{expense_type_id}", response_model=ExpenseTypeRead)
 async def change_expense_type(expense_type_id: int, expense_type: ExpenseTypeUpdate, repo: ExpenseTypeRepository = Depends(get_expense_type_repository)):
@@ -36,6 +46,7 @@ async def change_expense_type(expense_type_id: int, expense_type: ExpenseTypeUpd
     if not changed:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Expense type not found")
     return changed
+
 
 @router.delete("/{expense_type_id}", response_model=ExpenseTypeRead)
 async def delete_expense_type(expense_type_id: int, repo: ExpenseTypeRepository = Depends(get_expense_type_repository)):

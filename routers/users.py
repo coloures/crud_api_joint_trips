@@ -72,6 +72,18 @@ async def get_current_user(user_id: int = 1, repo: UserRepository = Depends(get_
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user
 
+@router.post("/fcm-token")
+async def save_fcm_token(
+    user_id: int,
+    token: str,
+    repo: UserRepository = Depends(get_user_repository)
+):
+    user = await repo.change(user_id, UserUpdate(fcm_token=token))
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return {"status": "ok"}
+
 
 @router.get("/{user_id}", response_model=UserRead)
 async def get_user(user_id: int, repo: UserRepository = Depends(get_user_repository)):

@@ -9,3 +9,4 @@ class User(Base):
     last_name = Column(String, nullable=False)
     phone_number = Column(String, nullable=False)
     avatar = Column(String, nullable=True)
+    fcm_token = Column(String, nullable=True)

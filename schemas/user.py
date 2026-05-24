@@ -26,3 +26,4 @@ class UserUpdate(BaseModel):
     last_name: Optional[str] = None
     phone_number: Optional[str] = None
     avatar: Optional[str] = None
+    fcm_token: Optional[str] = None

@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from schemas.notification import NotificationCreate, NotificationRead
 from repositories import NotificationRepository
+from services.notificationService import NotificationService
 from database import get_db
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
@@ -11,6 +12,9 @@ router = APIRouter(prefix="/notifications", tags=["notifications"])
 
 def get_notification_repository(db: AsyncSession = Depends(get_db)) -> NotificationRepository:
     return NotificationRepository(db)
+
+def get_notification_service(db: AsyncSession = Depends(get_db)) -> NotificationService:
+    return NotificationService(db)
 
 
 @router.get("/", response_model=list[NotificationRead])
@@ -36,8 +40,17 @@ async def get_unread_notifications(user_id: Optional[int] = None, repo: Notifica
 
 
 @router.post("/", response_model=int, status_code=status.HTTP_201_CREATED)
-async def add_notification(notification: NotificationCreate, repo: NotificationRepository = Depends(get_notification_repository)):
-    return await repo.add(notification)
+async def add_notification(
+    notification: NotificationCreate,
+    service: NotificationService = Depends(get_notification_service),
+):
+    return await service.create_and_send(
+        user_id=notification.user_id,
+        trip_id=notification.trip_id,
+        type=notification.type,
+        message=notification.message,
+        title="Trip notification",
+    )
 
 
 @router.patch("/{notification_id}/read", response_model=NotificationRead)

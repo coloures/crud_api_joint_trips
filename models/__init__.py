@@ -7,3 +7,4 @@ from .trip import Trip
 from .tripBudgetCategory import TripBudgetCategory
 from .tripMember import TripMember
 from .user import User
+from .reminder import Reminder

@@ -43,13 +43,11 @@ async def add_expense(
     expense_id = await expense_repo.add(expense)
 
     members = await member_repo.get_by_trip(expense.trip_id)
+    recipient_ids = [m.member_id for m in members if m.member_id != expense.user_id_pay]
 
-    for member in members:
-        if member.member_id == expense.user_id_pay:
-            continue
-
+    for user_id in recipient_ids:
         await notification_service.create_and_send(
-            user_id=member.member_id,
+            user_id=user_id,
             trip_id=expense.trip_id,
             type="expense_added",
             title="New expense",

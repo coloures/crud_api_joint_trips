@@ -8,6 +8,7 @@ class UserBase(BaseModel):
     last_name: str
     phone_number: str
     avatar: Optional[str] = None
+    fcm_token: Optional[str] = None
 
 
 class UserCreate(UserBase):

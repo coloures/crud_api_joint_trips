@@ -19,6 +19,11 @@ class ExpenseAllocationRepository:
         await self.db.commit()
         await self.db.refresh(allocation_model)
         return allocation_model.id
+    
+    async def get_one(self, allocation_id: int) -> ExpenseAllocation | None:
+        query = select(ExpenseAllocation).where(ExpenseAllocation.id == allocation_id)
+        result = await self.db.execute(query)
+        return result.scalar_one_or_none()
 
     async def get_all(self) -> list[ExpenseAllocation]:
         result = await self.db.execute(select(ExpenseAllocation))

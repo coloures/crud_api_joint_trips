@@ -17,7 +17,7 @@ CREATE TABLE users (
     last_name TEXT NOT NULL,
     phone_number TEXT NOT NULL,
     avatar TEXT,
-    push_token TEXT
+    fcm_token TEXT
 );
 
 CREATE TABLE currencies (

@@ -1,3 +1,4 @@
+import asyncio
 import firebase_admin
 from firebase_admin import credentials, messaging
 
@@ -19,6 +20,6 @@ async def send_push(token: str, title: str, body: str):
     )
 
     try:
-        messaging.send(message)
+        await asyncio.to_thread(messaging.send, message)
     except Exception as e:
         print(f"[Push Error] {e}")

@@ -1,8 +1,9 @@
+from repositories import TripMemberRepository, TripRepository
+from services.notificationService import NotificationService
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
-from repositories import TripMemberRepository
 from schemas.trip_member import TripMemberCreate, TripMemberRead, TripMemberUpdate
 
 router = APIRouter(prefix="/trip-members", tags=["trip-members"])
@@ -31,8 +32,28 @@ async def get_trip_member(member_id: int, repo: TripMemberRepository = Depends(g
 
 
 @router.post("/trips/{trip_id}", response_model=int, status_code=status.HTTP_201_CREATED)
-async def add_trip_member(trip_id: int, member: TripMemberCreate, repo: TripMemberRepository = Depends(get_trip_member_repository)):
-    return await repo.add(member)
+async def add_trip_member(
+    trip_id: int,
+    member: TripMemberCreate,
+    db: AsyncSession = Depends(get_db),
+):
+    member_repo = TripMemberRepository(db)
+    trip_repo = TripRepository(db)
+    notification_service = NotificationService(db)
+
+    member_id = await member_repo.add(member)
+
+    trip = await trip_repo.get_one(trip_id)
+
+    await notification_service.create_and_send(
+        user_id=member.member_id,
+        trip_id=trip_id,
+        type="trip_invite",
+        title="Trip invitation",
+        message=f"You were invited to trip: {trip.title if trip else 'Unknown trip'}",
+    )
+
+    return member_id
 
 
 @router.patch("/{member_id}", response_model=TripMemberRead)

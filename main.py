@@ -11,15 +11,18 @@ from routers.trip_budget_categories import router as trip_budget_categories_rout
 from routers.notifications import router as notifications_router
 from routers.avatar import router as avatar_router
 from routers.debts import router as debts_router
-
+from services.reminderScheduler import start_reminder_scheduler, stop_reminder_scheduler
+from routers.reminders import router as reminders_router
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(_):
     await init_db()
+    start_reminder_scheduler()
     print("Запуск")
     yield
     print("Выключение")
+    stop_reminder_scheduler()
     await engine.dispose()
 
 app = FastAPI(lifespan=lifespan)
@@ -35,6 +38,7 @@ app.include_router(trip_budget_categories_router)
 app.include_router(notifications_router)
 app.include_router(avatar_router)
 app.include_router(debts_router)
+app.include_router(reminders_router)
 
 @app.get('/')
 def root():

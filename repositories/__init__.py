@@ -7,3 +7,4 @@ from .tripBudgetCategoryRepository import TripBudgetCategoryRepository
 from .tripMemberRepository import TripMemberRepository
 from .tripRepository import TripRepository
 from .userRepository import UserRepository
+from .reminderRepository import ReminderRepository

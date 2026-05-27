@@ -10,4 +10,5 @@ __all__ = [
     "trip_budget_category",
     "trip_member",
     "user",
+    "reminder"
 ]

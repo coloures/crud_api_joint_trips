@@ -5,4 +5,4 @@ asyncpg
 httpx
 python-multipart
 firebase-admin
-appscheduler
+APScheduler

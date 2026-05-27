@@ -34,21 +34,22 @@ INSERT INTO "tripBudgetCategories" (trip_id, expense_type_id, planned_amount) VA
 INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (1, 6, 'confirmed', 'organizer');
 INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (1, 2, 'confirmed', 'participant');
 INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (2, 2, 'confirmed', 'organizer');
-INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (2, 4, 'pending', 'participant');
 INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (3, 6, 'confirmed', 'organizer');
 INSERT INTO "tripMembers" (trip_id, member_id, status, role) VALUES (1, 4, 'confirmed', 'organizer');
 
-INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 1, 15000, '2026-07-11', 2, 'Бронь домика в горах', 1);
-INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 2, 3500, '2026-07-12', 3, 'Продукты на ужин', 1);
+INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 2, 15000, '2026-07-11', 2, 'Бронь домика в горах', 1);
+INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 4, 3500, '2026-07-12', 3, 'Продукты на ужин', 1);
 INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (2, 2, 45000, '2026-08-02', 2, 'Отель all-inclusive', 1);
-INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 1, 8900, '2026-09-16', 1, 'Билеты на поезд Париж-Барселона', 1);
+INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 6, 8900, '2026-09-16', 1, 'Билеты на поезд Париж-Барселона', 1);
 INSERT INTO expenses (trip_id, user_id_pay, amount, date, type_of_expense, description, currency_id) VALUES (1, 4, 12500, '2026-09-18', 4, 'Экскурсия в Лувр', 1);
 
-INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (1, 1, 7500, TRUE);
-INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (1, 2, 7500, FALSE);
-INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (2, 1, 1750, TRUE);
-INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (2, 2, 1750, TRUE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (1, 2, 5000, TRUE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (1, 4, 5000, FALSE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (1, 6, 5000, FALSE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (2, 4, 3500, TRUE);
 INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (3, 2, 45000, FALSE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (4, 6, 8900, TRUE);
+INSERT INTO "expenseAllocations" (expense_id, user_id, amount, "isPaid") VALUES (5, 4, 12500, TRUE);
 
 INSERT INTO notifications (trip_id, user_id, type, message, is_read, created_at) VALUES (1, 1, 'expense_added', 'Иван добавил расход ''Билеты на самолёт'' на сумму 40 000 ₽', FALSE, '2026-06-10T10:30:00Z');
 INSERT INTO notifications (trip_id, user_id, type, message, is_read, created_at) VALUES (1, 2, 'reminder', 'Алексей, не забудьте добавить чек за ужин в ''Кавказские горы''.', FALSE, '2026-06-10T11:15:00Z');

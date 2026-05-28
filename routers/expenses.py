@@ -50,8 +50,8 @@ async def add_expense(
             user_id=user_id,
             trip_id=expense.trip_id,
             type="expense_added",
-            title="New expense",
-            message=f"New expense was added: {expense.amount}",
+            title="Новый расход",
+            message=f"Был добавлен новый расход: {expense.amount}",
         )
 
     return expense_id

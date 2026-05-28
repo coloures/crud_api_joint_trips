@@ -37,7 +37,7 @@ class NotificationRepository:
         result = await self.db.execute(
             select(Notification).where(
                 Notification.user_id == user_id,
-                Notification.is_read == False,  # noqa: E712
+                Notification.is_read == False,
             )
         )
         return result.scalars().all()

@@ -49,8 +49,8 @@ async def add_trip_member(
         user_id=member.member_id,
         trip_id=trip_id,
         type="trip_invite",
-        title="Trip invitation",
-        message=f"You were invited to trip: {trip.title if trip else 'Unknown trip'}",
+        title="Приглашение в поездку",
+        message=f"Вы были приглашены в поездку: {trip.title if trip else 'Неизвестное путешествие'}",
     )
 
     return member_id
